@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from decouple import config
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -20,10 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1yy2gw_jiud6_jt@dox$dn=$1$@&08i7=cnea^wtw6ynb%zd3*'
+SECRET_KEY = "django-insecure-1yy2gw_jiud6_jt@dox$dn=$1$@&08i7=cnea^wtw6ynb%zd3*"
+# SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -89,6 +92,7 @@ DATABASES = {
     }
 }
 
+
 AUTH_USER_MODEL = "user.User"
 
 # Password validation
@@ -137,8 +141,14 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = ''
+EMAIL_PORT = ""
+EMAIL_HOST_USER = ""
+
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework.authentication.TokenAuthentication"]
+    "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework.authentication.TokenAuthentication"],
+    "DEFAULT-CLASS": 'rest_framework.pagination.PageNumbers',
+    "PAGE-SIZE": 5
 }

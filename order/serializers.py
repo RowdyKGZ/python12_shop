@@ -16,16 +16,20 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        exclude = ('user', )
+        exclude = ('user', 'product')
 
     def create(self, validated_data):
         request = self.context.get("request")
         items = validated_data.pop("items")
         user = request.user
         order = Order.objects.create(user=user)
+        total = 0
         for item in items:
+            print(item)
+            total += item['product'].price * item['quantity']
             OrderItem.objects.create(order=order,
                                      product=item["product"],
                                      quantity=item['quantity'])
+        order.total_sum = total
         order.save()
         return order

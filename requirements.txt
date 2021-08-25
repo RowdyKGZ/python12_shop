@@ -1,4 +1,4 @@
-django
+django~=3.2.6
 pillow
-djangorestframework
-django-filter
+djangorestframework~=3.12.4
+django-filter~=2.4.0
